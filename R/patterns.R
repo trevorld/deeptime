@@ -256,6 +256,15 @@ ScaleDiscreteGeoPattern <- ggproto("ScaleDiscreteGeoPattern", ScaleDiscrete,
 #'       [geo_pattern()] for more details. default: "101" }
 #'     \item{\strong{`fill`}}{ Color used for the background. default: "white" }
 #'   }
+#'
+#'   The defaults above apply when `params` is supplied directly to this
+#'   function and when the pattern is drawn through \pkg{gridpattern} (>= 1.5.1,
+#'   e.g., `gridpattern::grid.pattern("geo")`), where the pattern is registered
+#'   as `"geo"` (qualified name `"deeptime::geo"`). When the pattern is drawn
+#'   through \pkg{ggpattern}, the geom's own aesthetic defaults apply instead
+#'   (`pattern_colour = "grey20"`, `pattern_fill = "grey80"`,
+#'   `pattern_scale = 1`, and the background from the geom's `fill`), except
+#'   that an unspecified `pattern_type` still defaults to `"101"`.
 #' @param params A list of pattern parameters to customize the plotted pattern
 #'   (see "Details").
 #' @param boundary_df A `data.frame` consisting of three columns: "x"

@@ -55,6 +55,7 @@ Suggests:
     rmarkdown,
     withr,
     ggpattern,
+    gridpattern (>= 1.5.1),
     ggrepel,
     rmacrostrat,
     svglite

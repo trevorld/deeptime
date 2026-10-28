@@ -1,5 +1,9 @@
 # deeptime (development version)
 
+Bug fixes:
+
+* The `"geo"` pattern is now registered with `gridpattern::register_pattern()` (when gridpattern >= 1.5.1 is installed) instead of overwriting the `ggpattern_geometry_funcs` option. This fixes an error when using `pattern = "geo"` with ggpattern without specifying `pattern_type` (now defaults to `"101"`), lets the pattern be used directly with `gridpattern::grid.pattern("geo")`, and no longer clobbers patterns registered by other packages or the user.
+
 # deeptime 2.4.0
 
 __deeptime now requires R version 4.1 or higher__.

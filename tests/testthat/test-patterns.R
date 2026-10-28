@@ -86,6 +86,9 @@ test_that("grid.pattern_geo works", {
 
 test_that("ggpattern works", {
   skip_if_not_installed("ggpattern")
+  skip_if_not_installed("gridpattern", "1.5.1")
+  skip_if("geo" %in% gridpattern::conflicting_patterns()$name,
+          "a conflicting 'geo' pattern is registered")
   df <- data.frame(trt = c("a", "b", "c"), outcome = c(2.3, 1.9, 3.2))
   gg <- ggplot(df, aes(trt, outcome)) +
     geom_col_pattern(aes(color = trt, pattern_type = trt), pattern = 'geo',
@@ -105,6 +108,47 @@ test_that("ggpattern works", {
     scale_color_viridis_d() +
     theme(legend.key.size = unit(1.5, 'cm'))
   expect_doppelganger_deeptime("ggpattern", gg, patterns = TRUE)
+})
+
+test_that("geo pattern is registered with gridpattern", {
+  skip_if_not_installed("gridpattern", "1.5.1")
+  expect_true("geo" %in% gridpattern::registered_patterns()$name)
+  expect_true(gridpattern::has_pattern("deeptime::geo"))
+
+  # the bare name "geo" is ambiguous if another "geo" pattern is registered
+  skip_if("geo" %in% gridpattern::conflicting_patterns()$name,
+          "a conflicting 'geo' pattern is registered")
+
+  x <- 0.5 + 0.5 * cos(seq(2 * pi / 4, by = 2 * pi / 6, length.out = 6))
+  y <- 0.5 + 0.5 * sin(seq(2 * pi / 4, by = 2 * pi / 6, length.out = 6))
+
+  # registered defaults apply when drawn through gridpattern
+  expect_doppelganger_deeptime("grid.pattern_geo_registered", {
+    grid.newpage()
+    gridpattern::grid.pattern("geo", x = x, y = y)
+  }, patterns = TRUE)
+
+  # explicit parameters and the `gp` fill (background) and col are respected
+  expect_doppelganger_deeptime("grid.pattern_geo_registered_gp", {
+    grid.newpage()
+    gridpattern::grid.pattern("geo", x = x, y = y, type = "633", scale = 4,
+                              gp = gpar(fill = "lightblue", col = "darkblue"))
+  }, patterns = TRUE)
+
+  skip_if_not_installed("ggpattern")
+  # `pattern_type` defaults to "101" when not specified in ggpattern
+  df <- data.frame(trt = c("a", "b", "c"), outcome = c(2.3, 1.9, 3.2))
+  gg <- ggplot(df, aes(trt, outcome)) +
+    geom_col_pattern(pattern = "geo")
+  expect_no_error(ggplotGrob(gg))
+  # draw on a throwaway device, then restore the previously active device
+  old_dev <- dev.cur()
+  pdf(NULL)
+  withr::defer({
+    dev.off()
+    if (old_dev > 1L) dev.set(old_dev)
+  })
+  expect_no_error(print(gg))
 })
 
 test_that("fgdc_dict works", {

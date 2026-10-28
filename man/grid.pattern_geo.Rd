@@ -37,6 +37,15 @@ the pattern. default: 'black'}
 \code{\link[=geo_pattern]{geo_pattern()}} for more details. default: "101" }
 \item{\strong{\code{fill}}}{ Color used for the background. default: "white" }
 }
+
+The defaults above apply when \code{params} is supplied directly to this
+function and when the pattern is drawn through \pkg{gridpattern} (>= 1.5.1,
+e.g., \code{gridpattern::grid.pattern("geo")}), where the pattern is registered
+as \code{"geo"} (qualified name \code{"deeptime::geo"}). When the pattern is drawn
+through \pkg{ggpattern}, the geom's own aesthetic defaults apply instead
+(\code{pattern_colour = "grey20"}, \code{pattern_fill = "grey80"},
+\code{pattern_scale = 1}, and the background from the geom's \code{fill}), except
+that an unspecified \code{pattern_type} still defaults to \code{"101"}.
 }
 \section{Warning}{
  Pattern fills are not supported on all graphics devices.
